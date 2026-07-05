@@ -1,0 +1,699 @@
+<title>발리 트래블로그 · 07.05-07.13</title>
+<style>
+  :root{
+    --bg:#f1f4ec;
+    --surface:#ffffff;
+    --surface-2:#e7ecdf;
+    --ink:#1c2420;
+    --ink-soft:#3d463f;
+    --muted:#6b7a67;
+    --line:#d7ddc9;
+    --accent:#b9791c;
+    --accent-strong:#8a5a12;
+    --accent-ink:#fff8ec;
+    --jade:#2f6b52;
+    --jade-soft:#e4efe7;
+    --coral:#b8502c;
+    --coral-soft:#f6e4dc;
+    --blue:#3f6fa8;
+    --blue-soft:#e3ecf5;
+    --plum:#8a4a72;
+    --plum-soft:#f2e5ee;
+    --active-bg:#1c2420;
+    --active-fg:#f1f4ec;
+    --shadow: 0 1px 2px rgba(28,36,32,.06), 0 8px 24px -12px rgba(28,36,32,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1613;
+      --surface:#161f1a;
+      --surface-2:#1d2921;
+      --ink:#eef1e7;
+      --ink-soft:#c9d2c3;
+      --muted:#8fa08a;
+      --line:#2a3730;
+      --accent:#e0a63f;
+      --accent-strong:#f1bb5c;
+      --accent-ink:#1a1206;
+      --jade:#5fae8b;
+      --jade-soft:#16342a;
+      --coral:#e2896a;
+      --coral-soft:#3a2019;
+      --blue:#7aa6d6;
+      --blue-soft:#182a3a;
+      --plum:#c988ac;
+      --plum-soft:#331f2c;
+      --active-bg:#e0a63f;
+      --active-fg:#1a1206;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e1613; --surface:#161f1a; --surface-2:#1d2921; --ink:#eef1e7; --ink-soft:#c9d2c3;
+    --muted:#8fa08a; --line:#2a3730; --accent:#e0a63f; --accent-strong:#f1bb5c; --accent-ink:#1a1206;
+    --jade:#5fae8b; --jade-soft:#16342a; --coral:#e2896a; --coral-soft:#3a2019;
+    --blue:#7aa6d6; --blue-soft:#182a3a; --plum:#c988ac; --plum-soft:#331f2c;
+    --active-bg:#e0a63f; --active-fg:#1a1206;
+  }
+  :root[data-theme="light"]{
+    --bg:#f1f4ec; --surface:#ffffff; --surface-2:#e7ecdf; --ink:#1c2420; --ink-soft:#3d463f;
+    --muted:#6b7a67; --line:#d7ddc9; --accent:#b9791c; --accent-strong:#8a5a12; --accent-ink:#fff8ec;
+    --jade:#2f6b52; --jade-soft:#e4efe7; --coral:#b8502c; --coral-soft:#f6e4dc;
+    --blue:#3f6fa8; --blue-soft:#e3ecf5; --plum:#8a4a72; --plum-soft:#f2e5ee;
+    --active-bg:#1c2420; --active-fg:#f1f4ec;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard Variable",Pretendard,"Malgun Gothic","Noto Sans KR",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  .mono{
+    font-family:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  a{color:var(--accent-strong);}
+  :root[data-theme="dark"] a{color:var(--accent);}
+  @media (prefers-color-scheme:dark){ a{color:var(--accent);} }
+
+  button{font:inherit;}
+  button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, .day-head:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+
+  .app{max-width:560px;margin:0 auto;padding-bottom:64px;}
+
+  /* ---- top ticket header ---- */
+  .ticket{
+    position:sticky; top:0; z-index:20;
+    background:var(--bg);
+    padding:14px 16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .ticket-title{
+    display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+    margin-bottom:12px;
+  }
+  .ticket-title h1{
+    font-size:1.05rem; font-weight:800; letter-spacing:-.01em; margin:0;
+  }
+  .ticket-title .route{
+    color:var(--muted); font-size:.78rem;
+  }
+  .tabs{display:flex; gap:6px; margin-bottom:10px;}
+  .tab{
+    flex:1; border:1px solid var(--line); background:var(--surface);
+    color:var(--muted); border-radius:10px; padding:8px 0; font-weight:700; font-size:.85rem;
+    cursor:pointer;
+  }
+  .tab.active{ background:var(--active-bg); color:var(--active-fg); border-color:var(--active-bg); }
+
+  .day-chips{
+    display:flex; gap:6px; overflow-x:auto; padding-bottom:12px;
+    scrollbar-width:none;
+  }
+  .day-chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:0 0 auto; border:1px solid var(--line); background:var(--surface);
+    border-radius:12px; padding:6px 10px; text-align:center; cursor:pointer;
+    min-width:52px;
+  }
+  .chip .d{font-family:ui-monospace,"SF Mono",Menlo,monospace; font-weight:700; font-size:.8rem; display:block; font-variant-numeric:tabular-nums;}
+  .chip .w{font-size:.68rem; color:var(--muted);}
+  .chip.today{border-color:var(--accent); background:var(--surface-2);}
+  .chip.today .d{color:var(--accent-strong);}
+  .chip.today::after{content:"오늘"; display:block; font-size:.62rem; color:var(--accent-strong); font-weight:700;}
+
+  main{padding:14px 16px 0;}
+
+  /* ---- day sections ---- */
+  .day{margin-bottom:10px; border:1px solid var(--line); border-radius:16px; background:var(--surface); overflow:hidden;}
+  .day-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:14px 16px; cursor:pointer; user-select:none; background:none; border:none; width:100%; text-align:left; color:var(--ink);
+  }
+  .day-head .label{display:flex; align-items:baseline; gap:8px;}
+  .day-head .date{font-weight:800; font-size:.98rem;}
+  .day-head .count{color:var(--muted); font-size:.78rem;}
+  .day-head .chev{color:var(--muted); transition:transform .18s ease; font-size:.85rem;}
+  .day.open .day-head .chev{transform:rotate(180deg);}
+  .day-body{display:none; padding:0 16px 16px;}
+  .day.open .day-body{display:block;}
+  @media (prefers-reduced-motion:no-preference){
+    .day-head .chev{transition:transform .18s ease;}
+  }
+
+  .tip-card{
+    background:var(--jade-soft); border-radius:12px; padding:10px 12px; margin:0 0 14px;
+    font-size:.85rem;
+  }
+  .tip-card .tip-title{font-weight:700; color:var(--jade); margin-bottom:4px;}
+  .tip-card ul{margin:0; padding-left:18px;}
+  .tip-card li{margin:2px 0;}
+
+  /* ---- timeline ---- */
+  .timeline{position:relative; padding-left:56px;}
+  .timeline::before{
+    content:""; position:absolute; left:24px; top:6px; bottom:6px; width:2px; background:var(--line);
+  }
+  .item{position:relative; padding:12px 0;}
+  .item:not(:last-child){border-bottom:1px dashed var(--line);}
+  .item-time{
+    position:absolute; left:-56px; top:14px; width:52px; text-align:right;
+    font-weight:700; font-size:.82rem; color:var(--ink-soft);
+  }
+  .item::after{
+    content:""; position:absolute; left:-32.5px; top:19px; width:9px; height:9px; border-radius:50%;
+    background:var(--surface); border:2px solid var(--accent);
+  }
+  .item-head{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; flex-wrap:wrap;}
+  .item-head h3{margin:0; font-size:.96rem; font-weight:700; line-height:1.35;}
+  .item-head h3 .flight{font-family:ui-monospace,monospace; color:var(--muted); font-weight:600; font-size:.78rem; margin-left:6px;}
+  .badge{
+    font-size:.7rem; font-weight:700; padding:3px 8px; border-radius:999px; white-space:nowrap;
+    background:var(--surface-2); color:var(--muted);
+  }
+  .tag{background:var(--jade-soft); color:var(--jade);}
+  .desc{margin:6px 0 0; white-space:pre-line; font-size:.87rem; color:var(--ink-soft);}
+  .desc.highlight{background:var(--coral-soft); border-radius:8px; padding:8px 10px; color:var(--ink);}
+  .warn{
+    margin-top:8px; display:flex; gap:6px; align-items:flex-start; font-size:.8rem;
+    background:var(--coral-soft); color:var(--coral); border-radius:8px; padding:7px 10px; font-weight:600;
+  }
+  .link-row{margin-top:8px;}
+  .link-row a{font-size:.8rem; text-decoration-color:var(--line);}
+
+  /* ---- extras (notes / expense) ---- */
+  .extras{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
+  details.box{border:1px solid var(--line); border-radius:10px; background:var(--bg);}
+  details.box summary{
+    list-style:none; cursor:pointer; padding:8px 10px; font-size:.8rem; font-weight:700;
+    display:flex; align-items:center; justify-content:space-between; color:var(--ink-soft);
+  }
+  details.box summary::-webkit-details-marker{display:none;}
+  details.box summary .sum-val{font-family:ui-monospace,monospace; color:var(--muted); font-weight:600;}
+  details.box[open] summary{border-bottom:1px solid var(--line);}
+  .box-inner{padding:10px;}
+
+  .mini-list{list-style:none; margin:0 0 8px; padding:0; display:flex; flex-direction:column; gap:6px;}
+  .mini-list:empty{margin:0;}
+  .mini-item{
+    display:flex; align-items:flex-start; gap:8px; font-size:.8rem; background:var(--surface);
+    border:1px solid var(--line); border-radius:8px; padding:6px 8px;
+  }
+  .mini-item .m-body{flex:1; min-width:0;}
+  .mini-item .m-time{font-family:ui-monospace,monospace; color:var(--muted); margin-right:6px;}
+  .mini-item a{word-break:break-all;}
+  .mini-item .del{
+    border:none; background:none; color:var(--muted); cursor:pointer; font-size:.9rem; line-height:1; padding:2px;
+  }
+  .mini-item .del:hover{color:var(--coral);}
+  .pill-row{display:inline-flex; align-items:center; gap:4px; padding:1px 7px; border-radius:999px; font-size:.7rem; font-weight:700; margin-right:6px;}
+  .pill-cash{background:var(--jade-soft); color:var(--jade);}
+  .pill-blue{background:var(--blue-soft); color:var(--blue);}
+  .pill-plum{background:var(--plum-soft); color:var(--plum);}
+
+  form.mini-form{display:flex; flex-direction:column; gap:8px;}
+  .mini-form input[type=text], .mini-form input[type=url], .mini-form input[type=number]{
+    border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px;
+    padding:8px 10px; font-size:.85rem; width:100%;
+  }
+  .seg{display:flex; gap:6px;}
+  .seg button{
+    flex:1; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
+    border-radius:8px; padding:7px 0; font-size:.8rem; font-weight:700; cursor:pointer;
+  }
+  .seg button.active{background:var(--active-bg); color:var(--active-fg); border-color:var(--active-bg);}
+  .amt-row{display:flex; gap:6px;}
+  .amt-row input{flex:1;}
+  .amt-row select{
+    border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:0 8px; font-size:.85rem;
+  }
+  .mini-form .submit{
+    border:none; background:var(--accent); color:var(--accent-ink); border-radius:8px; padding:9px 0;
+    font-weight:800; font-size:.85rem; cursor:pointer;
+  }
+
+  /* ---- settlement view ---- */
+  .settle{padding:14px 16px 40px; display:none;}
+  .settle.active{display:block;}
+  main.hidden{display:none;}
+  .settle-total{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:14px;
+  }
+  .settle-total h2{margin:0 0 12px; font-size:.95rem;}
+  .settle-row{display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-top:1px dashed var(--line);}
+  .settle-row:first-of-type{border-top:none;}
+  .settle-row .label{display:flex; align-items:center; font-size:.85rem; font-weight:700;}
+  .settle-row .vals{text-align:right; font-family:ui-monospace,monospace; font-size:.85rem; color:var(--ink-soft);}
+  .settle-row .vals div{white-space:nowrap;}
+  .settle-row.grand{border-top:2px solid var(--ink); margin-top:4px; padding-top:12px;}
+  .settle-row.grand .label{font-size:.92rem;}
+  .settle-row.grand .vals{color:var(--ink); font-weight:700;}
+  .settle-empty{color:var(--muted); font-size:.85rem; text-align:center; padding:24px 0;}
+
+  .settle-list{display:flex; flex-direction:column; gap:8px;}
+  .settle-list h2{font-size:.85rem; color:var(--muted); margin:0 0 4px; font-weight:700;}
+  .settle-item{
+    display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line);
+    border-radius:10px; padding:9px 10px; font-size:.82rem;
+  }
+  .settle-item .si-day{font-family:ui-monospace,monospace; color:var(--muted); flex:0 0 auto;}
+  .settle-item .si-title{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .settle-item .si-amt{font-family:ui-monospace,monospace; font-weight:700; flex:0 0 auto;}
+  .settle-item .del{border:none; background:none; color:var(--muted); cursor:pointer; font-size:1rem;}
+
+  .toast{
+    position:fixed; left:50%; bottom:22px; transform:translate(-50%,12px); background:var(--ink); color:var(--bg);
+    padding:9px 16px; border-radius:999px; font-size:.8rem; font-weight:700; opacity:0; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease; z-index:50;
+  }
+  .toast.show{opacity:1; transform:translate(-50%,0);}
+</style>
+
+<div class="app">
+  <div class="ticket">
+    <div class="ticket-title">
+      <h1>발리 트래블로그</h1>
+      <span class="route mono">CJJ ⇄ DPS · 07.05–07.13</span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-view="schedule">일정</button>
+      <button class="tab" data-view="settle">정산</button>
+    </div>
+    <div class="day-chips" id="dayChips"></div>
+  </div>
+
+  <main id="scheduleView"></main>
+
+  <section class="settle" id="settleView">
+    <div class="settle-total" id="settleTotal"></div>
+    <div class="settle-list" id="settleList"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var TRIP = [
+    { date:"2026-07-05", dow:"일", items:[
+      {time:"17:25", title:"청주 공항 출발", flight:"TW157", move:"무통", desc:"3시까지 도착 목표. 주차 예약 완료."},
+      {time:"23:15", title:"발리 공항 도착", desc:"입국심사 대기 30분이면 된다고 함"},
+      {time:"23:45", title:"ATM", desc:"BNI ATM기 찾기. 최대 2,500,000루피아만 인출 가능.\n트래블로그 수수료 무료 (checking account)", link:{label:"환전 · ATM 메모 (네이버블로그)", url:"https://blog.naver.com/mij__ya/224301607755"}},
+      {time:"23:55", title:"산타이 라운지", move:"고객, 그랩", desc:"10분 걸린다고 함"}
+    ]},
+    { date:"2026-07-06", dow:"월",
+      tip:{title:"우붓에서 먹어볼 것", items:["피손","폭립 식당","나시 쫌뿌르 (현지식 백반)","사테","바비굴링 (발리식 새끼돼지 통구이)"]},
+      items:[
+        {time:"02:00", title:"지프투어 픽업", move:"투어 차량", desc:"04:20 바투르산 도착, 04:40~07:30 일출 찍고 하산, 08:00 블랙라바, 09:00~10:00 커피농장/킨타마니카페"},
+        {time:"04:20", title:"바투르산 도착", move:"지프차", desc:"일출 대기 하고 사진찍기, 추우니까 꼭 싸매고 가기"},
+        {time:"08:00", title:"블랙 라바", move:"지프차", desc:"1시간 정도 사진 찍기"},
+        {time:"09:00", title:"킨타마니 카페", move:"지프차", desc:"1시간 정도 카페에서 쉬기"},
+        {time:"10:00", title:"커피농장", move:"투어 차량", desc:"커피 시음, 구경. 투꺽커피는 추가 금액 내야함"},
+        {time:"12:00", title:"우붓 호텔 드랍", move:"투어 차량", desc:"숙소에 짐 맡기기"},
+        {time:"12:30", title:"마사지", move:"도보", desc:"마사지 받고 쉬자..", highlight:true},
+        {time:"14:00", title:"호텔 체크인", move:"도보"},
+        {time:"18:00", title:"저녁", move:"도보", desc:"어디가지?\n· 폭립 맛집 (와룽 마칸 부스 or 와룽 폰독 마두)\n· tax와 tip이 17% 정도 붙음..\n· 바비굴링", highlight:true}
+      ]
+    },
+    { date:"2026-07-07", dow:"화", items:[
+      {time:"08:30", title:"조식", move:"도보", desc:"조식 먹고 숙소에서 놀기"},
+      {time:"13:00", title:"피숀 (Pison)", move:"도보", tag:"우붓 유명 식당", desc:"점심 · 트러플 안심 스테이크 필수!\n나머지는 피시커리, 스파게티 다 괜찮음\ntax와 tip이 17% 정도 붙음.."},
+      {time:"14:00", title:"우붓 왕궁 · 사라스와티 사원", move:"도보", desc:"왕궁은 30분이면 둘러봄. 근처 아트마켓 시장 쇼핑 중요"},
+      {time:"16:00", title:"카페", move:"도보"},
+      {time:"18:00", title:"숙소", move:"도보"},
+      {time:"19:00", title:"저녁", move:"도보"}
+    ]},
+    { date:"2026-07-08", dow:"수", items:[
+      {time:"07:00", title:"조식"},
+      {time:"08:30", title:"BMW 래프팅", move:"투어차량", desc:"와츠앱으로 예약하기! 픽드랍 다르게 문의", warn:"BMW 예약 필요 · 8:30 타임 좋을듯 - 15:00"},
+      {time:"15:00", title:"티스 카페", move:"투어차량", desc:"수영 안하면 입장료는 따로 없음. 피자 맛있다고 함!"},
+      {time:"18:00", title:"숙소", move:"그랩 부르기", desc:"숙소에서 씻고 나가야 할까?"},
+      {time:"19:00", title:"저녁", move:"도보", desc:"애매할텐데 집 근처에서 나시쫌뿌르나 먹을까..?"}
+    ]},
+    { date:"2026-07-09", dow:"목",
+      tip:{title:"짱구에서 먹어볼 것", items:["센소리움","나시 쫌뿌르 (와룽 사가)","립, 사테","해산물 레스토랑"]},
+      items:[
+        {time:"09:00", title:"조식"},
+        {time:"12:00", title:"체크아웃", desc:"체크아웃 후 우붓에서 놀다가 늦게 짱구로 이동할지, 막히기 전에 짱구로 갈지 정해야함"},
+        {time:"14:00", title:"이스틴 아쉬타 짱구 호텔 드랍", move:"그랩 부르기", desc:"체크인 및 휴식"},
+        {time:"16:00", title:"카페", desc:"페네라인 가서 스무디랑 커피 마셔보기"},
+        {time:"17:30", title:"해변 선셋 레스토랑", desc:"해변가로 가면 선셋 보기 좋은 카페 겸 레스토랑 많음"}
+      ]
+    },
+    { date:"2026-07-10", dow:"금", items:[
+      {time:"07:00", title:"모닝 러닝", desc:"Nomad Run Club, KYND community"},
+      {time:"08:30", title:"조식", desc:"조식 먹고 쉬기"},
+      {time:"12:30", title:"핀스 클럽", move:"고객", desc:"리조트에서 핀스클럽 3km 거리 (고객 10분)\n1시까지 못가면 추가 금액 내야함"},
+      {time:"19:00", title:"저녁", desc:"센소리움 갈까? 해산물 먹으러 갈까"}
+    ]},
+    { date:"2026-07-11", dow:"토", items:[
+      {time:"08:00", title:"조식"},
+      {time:"09:00", title:"꾸따 출발", desc:"오토바이 약하면 50분 넘게 걸림 (보통 35분~40분)"},
+      {time:"10:00", title:"꾸따 서핑", desc:"현금 필요"},
+      {time:"12:00", title:"대충 씻고 꾸따 구경"},
+      {time:"", title:"꾸따 할 일", desc:"점심 먹고 시내 간단히 보고 넘어오기"}
+    ]},
+    { date:"2026-07-12", dow:"일", items:[
+      {time:"12:00", title:"체크아웃", desc:"짐 맡기기"},
+      {time:"12:30", title:"와룽 시사", move:"도보", desc:"나시쫌뿌르 점심"},
+      {time:"15:00", title:"라 브리사", move:"도보"},
+      {time:"20:00", title:"공항 샌딩", move:"업체 차량", desc:"호텔에서 짐 찾고 샌딩 업체 기다리기"},
+      {time:"22:00", title:"공항 도착"}
+    ]},
+    { date:"2026-07-13", dow:"월", items:[
+      {time:"00:15", title:"비행기 탑승"},
+      {time:"08:35", title:"청주 공항 도착"},
+      {time:"11:00", title:"집 도착 ㅠㅠ"}
+    ]}
+  ];
+
+  var STORE_KEY = "bali2026-trip-state-v1";
+  var state = loadState();
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return { notes:{}, expenses:{} };
+  }
+  function saveState(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+  function escapeHtml(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function fmtNum(n){ return Number(n||0).toLocaleString("ko-KR"); }
+  function todayIso(){
+    var d = new Date();
+    var y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,"0"), day = String(d.getDate()).padStart(2,"0");
+    return y+"-"+m+"-"+day;
+  }
+  function shortDate(iso){ return iso.slice(5).replace("-","."); }
+
+  var today = todayIso();
+
+  // ---------- render day chips ----------
+  var chipsEl = document.getElementById("dayChips");
+  chipsEl.innerHTML = TRIP.map(function(day, di){
+    var isToday = day.date === today;
+    return '<button class="chip'+(isToday?' today':'')+'" data-day="'+di+'">'+
+      '<span class="d mono">'+shortDate(day.date)+'</span><span class="w">'+day.dow+'</span></button>';
+  }).join("");
+
+  // ---------- render schedule ----------
+  var scheduleEl = document.getElementById("scheduleView");
+
+  function itemHtml(it, id){
+    var parts = [];
+    parts.push('<div class="item" id="'+id+'">');
+    parts.push('<div class="item-time mono">'+escapeHtml(it.time||"")+'</div>');
+    parts.push('<div class="item-body">');
+    parts.push('<div class="item-head"><h3>'+escapeHtml(it.title)+(it.flight?'<span class="flight">'+escapeHtml(it.flight)+'</span>':'')+'</h3>'+(it.move?'<span class="badge">'+escapeHtml(it.move)+'</span>':'')+'</div>');
+    if(it.tag) parts.push('<div><span class="badge tag">'+escapeHtml(it.tag)+'</span></div>');
+    if(it.desc) parts.push('<p class="desc'+(it.highlight?' highlight':'')+'">'+escapeHtml(it.desc)+'</p>');
+    if(it.warn) parts.push('<div class="warn">⚠ '+escapeHtml(it.warn)+'</div>');
+    if(it.link) parts.push('<div class="link-row"><a href="'+escapeHtml(it.link.url)+'" target="_blank" rel="noopener">'+escapeHtml(it.link.label)+' ↗</a></div>');
+    parts.push('<div class="extras">');
+    parts.push(
+      '<details class="box" data-kind="note">'+
+        '<summary>내 메모 <span class="sum-val" data-note-count="'+id+'">0</span></summary>'+
+        '<div class="box-inner">'+
+          '<ul class="mini-list" data-note-list="'+id+'"></ul>'+
+          '<form class="mini-form" data-note-form="'+id+'">'+
+            '<input type="text" class="n-time" placeholder="시간 (선택, 예: 13:20)">'+
+            '<input type="text" class="n-text" placeholder="메모 내용" required>'+
+            '<input type="url" class="n-url" placeholder="링크 (선택)">'+
+            '<button type="submit" class="submit">메모 추가</button>'+
+          '</form>'+
+        '</div>'+
+      '</details>'
+    );
+    parts.push(
+      '<details class="box" data-kind="expense">'+
+        '<summary>지출 <span class="sum-val" data-exp-sum="'+id+'">-</span></summary>'+
+        '<div class="box-inner">'+
+          '<ul class="mini-list" data-exp-list="'+id+'"></ul>'+
+          '<form class="mini-form" data-exp-form="'+id+'">'+
+            '<div class="seg" data-field="method">'+
+              '<button type="button" class="active" data-value="현금">현금</button>'+
+              '<button type="button" data-value="카드">카드</button>'+
+            '</div>'+
+            '<div class="seg" data-field="card" hidden>'+
+              '<button type="button" class="active" data-value="교카드">교카드</button>'+
+              '<button type="button" data-value="징카드">징카드</button>'+
+            '</div>'+
+            '<div class="amt-row">'+
+              '<input type="number" inputmode="decimal" class="e-amount" placeholder="금액" required min="0">'+
+              '<select class="e-currency"><option value="IDR">Rp</option><option value="KRW">원</option></select>'+
+            '</div>'+
+            '<input type="text" class="e-memo" placeholder="메모 (선택, 예: 점심값)">'+
+            '<button type="submit" class="submit">지출 추가</button>'+
+          '</form>'+
+        '</div>'+
+      '</details>'
+    );
+    parts.push('</div></div></div>');
+    return parts.join("");
+  }
+
+  var dayHtml = TRIP.map(function(day, di){
+    var isToday = day.date === today;
+    var h = '<section class="day'+(isToday?' open':'')+'" id="day-'+di+'" data-day="'+di+'">';
+    h += '<button class="day-head" data-toggle="'+di+'"><span class="label"><span class="date">'+shortDate(day.date)+' ('+day.dow+')</span><span class="count">'+day.items.length+'개 일정</span></span><span class="chev">⌄</span></button>';
+    h += '<div class="day-body"><div class="timeline">';
+    if(day.tip){
+      h += '<div class="tip-card"><div class="tip-title">'+escapeHtml(day.tip.title)+'</div><ul>'+day.tip.items.map(function(x){return '<li>'+escapeHtml(x)+'</li>';}).join("")+'</ul></div>';
+    }
+    day.items.forEach(function(it, ii){
+      h += itemHtml(it, "d"+di+"-i"+ii);
+    });
+    h += '</div></div></section>';
+    return h;
+  }).join("");
+  scheduleEl.innerHTML = dayHtml;
+
+  // has any day.open by default? if today not in range, open day 0
+  if(!TRIP.some(function(d){return d.date===today;})){
+    var first = scheduleEl.querySelector(".day");
+    if(first) first.classList.add("open");
+  }
+
+  // ---------- toggles: day open/close, tabs, day chips ----------
+  document.addEventListener("click", function(e){
+    var head = e.target.closest(".day-head");
+    if(head){
+      head.closest(".day").classList.toggle("open");
+      return;
+    }
+    var chip = e.target.closest(".chip");
+    if(chip){
+      var di = chip.getAttribute("data-day");
+      var sec = document.getElementById("day-"+di);
+      sec.classList.add("open");
+      switchView("schedule");
+      sec.scrollIntoView({behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+      return;
+    }
+    var tab = e.target.closest(".tab");
+    if(tab){
+      switchView(tab.getAttribute("data-view"));
+      return;
+    }
+    var seg = e.target.closest(".seg button");
+    if(seg){
+      var segGroup = seg.closest(".seg");
+      segGroup.querySelectorAll("button").forEach(function(b){ b.classList.remove("active"); });
+      seg.classList.add("active");
+      if(segGroup.getAttribute("data-field") === "method"){
+        var cardSeg = segGroup.parentElement.querySelector('.seg[data-field="card"]');
+        cardSeg.hidden = seg.getAttribute("data-value") !== "카드";
+      }
+      return;
+    }
+    var del = e.target.closest(".del");
+    if(del){
+      var type = del.getAttribute("data-type");
+      var id = del.getAttribute("data-id");
+      var idx = Number(del.getAttribute("data-idx"));
+      if(type === "note"){ state.notes[id].splice(idx,1); }
+      else{ state.expenses[id].splice(idx,1); }
+      saveState();
+      refreshExtras(id);
+      renderSettle();
+      showToast("삭제됨");
+      return;
+    }
+  });
+
+  function switchView(view){
+    document.querySelectorAll(".tab").forEach(function(t){ t.classList.toggle("active", t.getAttribute("data-view")===view); });
+    document.getElementById("scheduleView").classList.toggle("hidden", view!=="schedule");
+    document.getElementById("settleView").classList.toggle("active", view==="settle");
+    if(view==="settle") renderSettle();
+  }
+
+  // ---------- forms: add note / add expense ----------
+  document.addEventListener("submit", function(e){
+    var noteForm = e.target.closest("[data-note-form]");
+    if(noteForm){
+      e.preventDefault();
+      var id = noteForm.getAttribute("data-note-form");
+      var timeVal = noteForm.querySelector(".n-time").value.trim();
+      var textVal = noteForm.querySelector(".n-text").value.trim();
+      var urlVal = noteForm.querySelector(".n-url").value.trim();
+      if(!textVal) return;
+      state.notes[id] = state.notes[id] || [];
+      state.notes[id].push({ time:timeVal, text:textVal, url:urlVal });
+      saveState();
+      noteForm.reset();
+      refreshExtras(id);
+      showToast("메모 저장됨");
+      return;
+    }
+    var expForm = e.target.closest("[data-exp-form]");
+    if(expForm){
+      e.preventDefault();
+      var id2 = expForm.getAttribute("data-exp-form");
+      var method = expForm.querySelector('.seg[data-field="method"] button.active').getAttribute("data-value");
+      var card = null;
+      if(method === "카드"){
+        card = expForm.querySelector('.seg[data-field="card"] button.active').getAttribute("data-value");
+      }
+      var amount = Number(expForm.querySelector(".e-amount").value);
+      var currency = expForm.querySelector(".e-currency").value;
+      var memo = expForm.querySelector(".e-memo").value.trim();
+      if(!amount) return;
+      state.expenses[id2] = state.expenses[id2] || [];
+      state.expenses[id2].push({ method:method, card:card, amount:amount, currency:currency, memo:memo });
+      saveState();
+      expForm.reset();
+      expForm.querySelectorAll(".seg button").forEach(function(b,i){ b.classList.toggle("active", i===0); });
+      expForm.querySelector('.seg[data-field="card"]').hidden = true;
+      refreshExtras(id2);
+      showToast("지출 저장됨");
+      return;
+    }
+  });
+
+  function methodPill(entry){
+    if(entry.method === "현금") return '<span class="pill-row pill-cash">현금</span>';
+    if(entry.card === "교카드") return '<span class="pill-row pill-blue">교카드</span>';
+    return '<span class="pill-row pill-plum">징카드</span>';
+  }
+  function currencySymbol(c){ return c === "KRW" ? "원" : "Rp"; }
+
+  function refreshExtras(id){
+    var noteListEl = document.querySelector('[data-note-list="'+id+'"]');
+    var notes = state.notes[id] || [];
+    if(noteListEl){
+      noteListEl.innerHTML = notes.map(function(n, i){
+        return '<li class="mini-item"><div class="m-body">'+(n.time?'<span class="m-time">'+escapeHtml(n.time)+'</span>':'')+escapeHtml(n.text)+
+          (n.url?'<br><a href="'+escapeHtml(n.url)+'" target="_blank" rel="noopener">'+escapeHtml(n.url)+' ↗</a>':'')+
+          '</div><button class="del" data-type="note" data-id="'+id+'" data-idx="'+i+'" aria-label="삭제">×</button></li>';
+      }).join("");
+    }
+    var noteCountEl = document.querySelector('[data-note-count="'+id+'"]');
+    if(noteCountEl) noteCountEl.textContent = notes.length ? notes.length : "0";
+
+    var expListEl = document.querySelector('[data-exp-list="'+id+'"]');
+    var exps = state.expenses[id] || [];
+    if(expListEl){
+      expListEl.innerHTML = exps.map(function(x, i){
+        return '<li class="mini-item"><div class="m-body">'+methodPill(x)+'<span class="mono">'+fmtNum(x.amount)+' '+currencySymbol(x.currency)+'</span>'+
+          (x.memo?' · '+escapeHtml(x.memo):'')+
+          '</div><button class="del" data-type="expense" data-id="'+id+'" data-idx="'+i+'" aria-label="삭제">×</button></li>';
+      }).join("");
+    }
+    var expSumEl = document.querySelector('[data-exp-sum="'+id+'"]');
+    if(expSumEl){
+      if(!exps.length){ expSumEl.textContent = "-"; }
+      else{
+        var byCur = {};
+        exps.forEach(function(x){ byCur[x.currency] = (byCur[x.currency]||0) + Number(x.amount); });
+        expSumEl.textContent = Object.keys(byCur).map(function(c){ return fmtNum(byCur[c])+currencySymbol(c); }).join(" · ");
+      }
+    }
+  }
+
+  // initial paint of all item extras
+  TRIP.forEach(function(day, di){
+    day.items.forEach(function(it, ii){ refreshExtras("d"+di+"-i"+ii); });
+  });
+
+  // ---------- settlement view ----------
+  function renderSettle(){
+    var totalEl = document.getElementById("settleTotal");
+    var listEl = document.getElementById("settleList");
+
+    var groups = { "현금":{}, "교카드":{}, "징카드":{} };
+    var grand = {};
+    var flat = [];
+
+    TRIP.forEach(function(day, di){
+      day.items.forEach(function(it, ii){
+        var id = "d"+di+"-i"+ii;
+        (state.expenses[id]||[]).forEach(function(x, xi){
+          var key = x.method === "현금" ? "현금" : x.card;
+          groups[key][x.currency] = (groups[key][x.currency]||0) + Number(x.amount);
+          grand[x.currency] = (grand[x.currency]||0) + Number(x.amount);
+          flat.push({ day:shortDate(day.date), dow:day.dow, title:it.title, id:id, idx:xi, entry:x });
+        });
+      });
+    });
+
+    function rowHtml(label, pillClass, sums){
+      var keys = Object.keys(sums);
+      var vals = keys.length ? keys.map(function(c){ return '<div>'+fmtNum(sums[c])+' '+currencySymbol(c)+'</div>'; }).join("") : '<div>0</div>';
+      return '<div class="settle-row"><span class="label"><span class="pill-row '+pillClass+'">'+label+'</span></span><span class="vals">'+vals+'</span></div>';
+    }
+
+    var html = '<h2>정산 요약</h2>';
+    html += rowHtml("현금", "pill-cash", groups["현금"]);
+    html += rowHtml("교카드", "pill-blue", groups["교카드"]);
+    html += rowHtml("징카드", "pill-plum", groups["징카드"]);
+    var grandKeys = Object.keys(grand);
+    html += '<div class="settle-row grand"><span class="label">전체 합계</span><span class="vals">'+
+      (grandKeys.length ? grandKeys.map(function(c){ return '<div>'+fmtNum(grand[c])+' '+currencySymbol(c)+'</div>'; }).join("") : '<div>0</div>')+
+      '</span></div>';
+    totalEl.innerHTML = html;
+
+    if(!flat.length){
+      listEl.innerHTML = '<div class="settle-empty">아직 등록된 지출이 없어요. 일정에서 항목을 열고 지출을 추가해 보세요.</div>';
+      return;
+    }
+    listEl.innerHTML = '<h2>전체 내역</h2>' + flat.map(function(f){
+      return '<div class="settle-item"><span class="si-day mono">'+f.day+'('+f.dow+')</span>'+
+        '<span class="si-title">'+escapeHtml(f.title)+(f.entry.memo?' · '+escapeHtml(f.entry.memo):'')+'</span>'+
+        '<span class="si-amt">'+fmtNum(f.entry.amount)+currencySymbol(f.entry.currency)+'</span>'+
+        '<button class="del" data-type="expense" data-id="'+f.id+'" data-idx="'+f.idx+'" aria-label="삭제">×</button></div>';
+    }).join("");
+  }
+
+  // ---------- toast ----------
+  var toastEl = document.getElementById("toast");
+  var toastTimer = null;
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 1300);
+  }
+
+  // scroll today's section into view on first load (if trip is live)
+  var todaySec = TRIP.some(function(d){return d.date===today;}) ? document.getElementById("day-"+TRIP.findIndex(function(d){return d.date===today;})) : null;
+  if(todaySec){
+    setTimeout(function(){ todaySec.scrollIntoView({behavior:"auto", block:"start"}); }, 0);
+  }
+})();
+</script>
