@@ -1,4 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#f1f4ec">
 <title>발리 트래블로그 · 07.05-07.13</title>
+</head>
+<body>
 <style>
   :root{
     --bg:#f1f4ec;
@@ -71,6 +81,7 @@
     font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard Variable",Pretendard,"Malgun Gothic","Noto Sans KR",sans-serif;
     -webkit-font-smoothing:antialiased;
     line-height:1.5;
+    padding-bottom:env(safe-area-inset-bottom);
   }
   .mono{
     font-family:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,monospace;
@@ -81,7 +92,7 @@
   @media (prefers-color-scheme:dark){ a{color:var(--accent);} }
 
   button{font:inherit;}
-  button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, .day-head:focus-visible{
+  button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .day-head:focus-visible{
     outline:2px solid var(--accent); outline-offset:2px;
   }
 
@@ -91,7 +102,7 @@
   .ticket{
     position:sticky; top:0; z-index:20;
     background:var(--bg);
-    padding:14px 16px 0;
+    padding:max(14px, env(safe-area-inset-top)) 16px 0;
     border-bottom:1px solid var(--line);
   }
   .ticket-title{
@@ -128,7 +139,7 @@
   .chip.today .d{color:var(--accent-strong);}
   .chip.today::after{content:"오늘"; display:block; font-size:.62rem; color:var(--accent-strong); font-weight:700;}
 
-  main{padding:14px 16px 0;}
+  main{padding:14px 16px 0; max-width:100%; overflow-x:hidden;}
 
   /* ---- day sections ---- */
   .day{margin-bottom:10px; border:1px solid var(--line); border-radius:16px; background:var(--surface); overflow:hidden;}
@@ -156,7 +167,7 @@
   .tip-card li{margin:2px 0;}
 
   /* ---- timeline ---- */
-  .timeline{position:relative; padding-left:56px;}
+  .timeline{position:relative; padding-left:56px; max-width:100%;}
   .timeline::before{
     content:""; position:absolute; left:24px; top:6px; bottom:6px; width:2px; background:var(--line);
   }
@@ -171,14 +182,15 @@
     background:var(--surface); border:2px solid var(--accent);
   }
   .item-head{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; flex-wrap:wrap;}
-  .item-head h3{margin:0; font-size:.96rem; font-weight:700; line-height:1.35;}
+  .item-head h3{margin:0; font-size:.96rem; font-weight:700; line-height:1.35; min-width:0; overflow-wrap:break-word;}
   .item-head h3 .flight{font-family:ui-monospace,monospace; color:var(--muted); font-weight:600; font-size:.78rem; margin-left:6px;}
+  .item-head-right{display:flex; align-items:center; gap:4px; flex:0 0 auto;}
   .badge{
     font-size:.7rem; font-weight:700; padding:3px 8px; border-radius:999px; white-space:nowrap;
     background:var(--surface-2); color:var(--muted);
   }
   .tag{background:var(--jade-soft); color:var(--jade);}
-  .desc{margin:6px 0 0; white-space:pre-line; font-size:.87rem; color:var(--ink-soft);}
+  .desc{margin:6px 0 0; white-space:pre-line; font-size:.87rem; color:var(--ink-soft); overflow-wrap:break-word;}
   .desc.highlight{background:var(--coral-soft); border-radius:8px; padding:8px 10px; color:var(--ink);}
   .warn{
     margin-top:8px; display:flex; gap:6px; align-items:flex-start; font-size:.8rem;
@@ -187,7 +199,12 @@
   .link-row{margin-top:8px;}
   .link-row a{font-size:.8rem; text-decoration-color:var(--line);}
 
-  /* ---- extras (notes / expense) ---- */
+  .del-item{
+    border:none; background:none; color:var(--muted); cursor:pointer; font-size:1.05rem; line-height:1; padding:2px 6px;
+  }
+  .del-item:hover{color:var(--coral);}
+
+  /* ---- extras (notes / expense / edit) ---- */
   .extras{margin-top:10px; display:flex; flex-direction:column; gap:6px;}
   details.box{border:1px solid var(--line); border-radius:10px; background:var(--bg);}
   details.box summary{
@@ -218,10 +235,11 @@
   .pill-plum{background:var(--plum-soft); color:var(--plum);}
 
   form.mini-form{display:flex; flex-direction:column; gap:8px;}
-  .mini-form input[type=text], .mini-form input[type=url], .mini-form input[type=number]{
+  .mini-form input[type=text], .mini-form input[type=url], .mini-form input[type=number], .mini-form textarea{
     border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px;
-    padding:8px 10px; font-size:.85rem; width:100%;
+    padding:8px 10px; font-size:.85rem; width:100%; font-family:inherit;
   }
+  .mini-form textarea{resize:vertical; min-height:2.4em;}
   .seg{display:flex; gap:6px;}
   .seg button{
     flex:1; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft);
@@ -229,7 +247,7 @@
   }
   .seg button.active{background:var(--active-bg); color:var(--active-fg); border-color:var(--active-bg);}
   .amt-row{display:flex; gap:6px;}
-  .amt-row input{flex:1;}
+  .amt-row input{flex:1; min-width:0;}
   .amt-row select{
     border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:0 8px; font-size:.85rem;
   }
@@ -237,6 +255,22 @@
     border:none; background:var(--accent); color:var(--accent-ink); border-radius:8px; padding:9px 0;
     font-weight:800; font-size:.85rem; cursor:pointer;
   }
+
+  /* ---- add item ---- */
+  .add-item-row{margin-top:10px;}
+  .add-item-btn{
+    width:100%; border:1px dashed var(--line); background:none; color:var(--muted);
+    border-radius:10px; padding:9px 0; font-weight:700; font-size:.82rem; cursor:pointer;
+  }
+  .add-item-btn:hover{border-color:var(--accent); color:var(--accent-strong);}
+  .add-item-form{margin-top:8px;}
+
+  /* ---- generic button (backup card) ---- */
+  .btn{
+    border:none; background:var(--accent); color:var(--accent-ink); border-radius:8px; padding:10px 0;
+    font-weight:800; font-size:.85rem; cursor:pointer; text-align:center; display:block; flex:1;
+  }
+  .btn.ghost{background:var(--surface-2); color:var(--ink-soft); border:1px solid var(--line);}
 
   /* ---- settlement view ---- */
   .settle{padding:14px 16px 40px; display:none;}
@@ -246,6 +280,7 @@
     background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:14px;
   }
   .settle-total h2{margin:0 0 12px; font-size:.95rem;}
+  .settle-total p{margin:0 0 12px; font-size:.8rem; color:var(--muted);}
   .settle-row{display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-top:1px dashed var(--line);}
   .settle-row:first-of-type{border-top:none;}
   .settle-row .label{display:flex; align-items:center; font-size:.85rem; font-weight:700;}
@@ -267,10 +302,14 @@
   .settle-item .si-amt{font-family:ui-monospace,monospace; font-weight:700; flex:0 0 auto;}
   .settle-item .del{border:none; background:none; color:var(--muted); cursor:pointer; font-size:1rem;}
 
+  .backup-row{display:flex; gap:8px;}
+  .backup-file-label{position:relative; overflow:hidden;}
+  .backup-file-label input[type=file]{position:absolute; inset:0; opacity:0; cursor:pointer;}
+
   .toast{
-    position:fixed; left:50%; bottom:22px; transform:translate(-50%,12px); background:var(--ink); color:var(--bg);
+    position:fixed; left:50%; bottom:calc(22px + env(safe-area-inset-bottom)); transform:translate(-50%,12px); background:var(--ink); color:var(--bg);
     padding:9px 16px; border-radius:999px; font-size:.8rem; font-weight:700; opacity:0; pointer-events:none;
-    transition:opacity .2s ease, transform .2s ease; z-index:50;
+    transition:opacity .2s ease, transform .2s ease; z-index:50; max-width:88vw; text-align:center;
   }
   .toast.show{opacity:1; transform:translate(-50%,0);}
 </style>
@@ -293,6 +332,14 @@
   <section class="settle" id="settleView">
     <div class="settle-total" id="settleTotal"></div>
     <div class="settle-list" id="settleList"></div>
+    <div class="settle-total" id="backupCard">
+      <h2>데이터 백업</h2>
+      <p>메모·지출·수정 내용은 이 폰 브라우저에 자동 저장돼요. 다른 기기로 옮기거나 따로 보관하려면 JSON으로 내보내거나 불러올 수 있어요.</p>
+      <div class="backup-row">
+        <button type="button" class="btn" id="exportBtn">내보내기 (JSON)</button>
+        <label class="btn ghost backup-file-label">불러오기<input type="file" id="importFile" accept="application/json"></label>
+      </div>
+    </div>
   </section>
 </div>
 
@@ -378,12 +425,18 @@
   var STORE_KEY = "bali2026-trip-state-v1";
   var state = loadState();
 
+  function defaultState(){
+    return { notes:{}, expenses:{}, overrides:{}, customItems:{}, customCounter:0 };
+  }
   function loadState(){
     try{
       var raw = localStorage.getItem(STORE_KEY);
-      if(raw) return JSON.parse(raw);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        return Object.assign(defaultState(), parsed);
+      }
     }catch(e){}
-    return { notes:{}, expenses:{} };
+    return defaultState();
   }
   function saveState(){
     try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
@@ -400,6 +453,44 @@
     return y+"-"+m+"-"+day;
   }
   function shortDate(iso){ return iso.slice(5).replace("-","."); }
+  function isCustomId(id){ var seg = id.split("-")[1]; return !!seg && seg.charAt(0) === "c"; }
+
+  function findBaseItem(id){
+    var m = id.match(/^d(\d+)-i(\d+)$/);
+    if(!m) return null;
+    var day = TRIP[Number(m[1])];
+    if(!day) return null;
+    return day.items[Number(m[2])] || null;
+  }
+  function findCustomItem(id){
+    var days = Object.keys(state.customItems);
+    for(var k=0;k<days.length;k++){
+      var arr = state.customItems[days[k]];
+      for(var i=0;i<arr.length;i++){
+        if(arr[i].id === id) return { dayIndex:days[k], idx:i, item:arr[i] };
+      }
+    }
+    return null;
+  }
+  function effectiveData(id){
+    if(isCustomId(id)){
+      var f = findCustomItem(id);
+      return f ? f.item : null;
+    }
+    var base = findBaseItem(id);
+    if(!base) return null;
+    return state.overrides[id] ? Object.assign({}, base, state.overrides[id]) : base;
+  }
+  function dayItemCount(di){
+    var base = TRIP[di] ? TRIP[di].items.length : 0;
+    var custom = (state.customItems[di]||[]).length;
+    return base + custom;
+  }
+  function updateDayCount(di){
+    if(di == null) return;
+    var el = document.querySelector('.day[data-day="'+di+'"] .day-head .count');
+    if(el) el.textContent = dayItemCount(di)+"개 일정";
+  }
 
   var today = todayIso();
 
@@ -411,15 +502,14 @@
       '<span class="d mono">'+shortDate(day.date)+'</span><span class="w">'+day.dow+'</span></button>';
   }).join("");
 
-  // ---------- render schedule ----------
   var scheduleEl = document.getElementById("scheduleView");
 
-  function itemHtml(it, id){
+  function itemHtml(it, id, isCustom){
     var parts = [];
     parts.push('<div class="item" id="'+id+'">');
     parts.push('<div class="item-time mono">'+escapeHtml(it.time||"")+'</div>');
     parts.push('<div class="item-body">');
-    parts.push('<div class="item-head"><h3>'+escapeHtml(it.title)+(it.flight?'<span class="flight">'+escapeHtml(it.flight)+'</span>':'')+'</h3>'+(it.move?'<span class="badge">'+escapeHtml(it.move)+'</span>':'')+'</div>');
+    parts.push('<div class="item-head"><h3>'+escapeHtml(it.title)+(it.flight?'<span class="flight">'+escapeHtml(it.flight)+'</span>':'')+'</h3><span class="item-head-right">'+(it.move?'<span class="badge">'+escapeHtml(it.move)+'</span>':'')+(isCustom?'<button type="button" class="del-item" data-id="'+id+'" aria-label="일정 삭제">×</button>':'')+'</span></div>');
     if(it.tag) parts.push('<div><span class="badge tag">'+escapeHtml(it.tag)+'</span></div>');
     if(it.desc) parts.push('<p class="desc'+(it.highlight?' highlight':'')+'">'+escapeHtml(it.desc)+'</p>');
     if(it.warn) parts.push('<div class="warn">⚠ '+escapeHtml(it.warn)+'</div>');
@@ -463,33 +553,84 @@
         '</div>'+
       '</details>'
     );
+    parts.push(
+      '<details class="box" data-kind="edit">'+
+        '<summary>일정 수정</summary>'+
+        '<div class="box-inner">'+
+          '<form class="mini-form" data-edit-form="'+id+'">'+
+            '<input type="text" class="ed-time" placeholder="시간 (예: 13:20)" value="'+escapeHtml(it.time||"")+'">'+
+            '<input type="text" class="ed-title" placeholder="제목" required value="'+escapeHtml(it.title||"")+'">'+
+            '<input type="text" class="ed-move" placeholder="이동수단 (선택)" value="'+escapeHtml(it.move||"")+'">'+
+            '<textarea class="ed-desc" placeholder="설명 (선택)" rows="2">'+escapeHtml(it.desc||"")+'</textarea>'+
+            '<button type="submit" class="submit">저장</button>'+
+          '</form>'+
+        '</div>'+
+      '</details>'
+    );
     parts.push('</div></div></div>');
     return parts.join("");
   }
 
-  var dayHtml = TRIP.map(function(day, di){
-    var isToday = day.date === today;
-    var h = '<section class="day'+(isToday?' open':'')+'" id="day-'+di+'" data-day="'+di+'">';
-    h += '<button class="day-head" data-toggle="'+di+'"><span class="label"><span class="date">'+shortDate(day.date)+' ('+day.dow+')</span><span class="count">'+day.items.length+'개 일정</span></span><span class="chev">⌄</span></button>';
-    h += '<div class="day-body"><div class="timeline">';
-    if(day.tip){
-      h += '<div class="tip-card"><div class="tip-title">'+escapeHtml(day.tip.title)+'</div><ul>'+day.tip.items.map(function(x){return '<li>'+escapeHtml(x)+'</li>';}).join("")+'</ul></div>';
-    }
-    day.items.forEach(function(it, ii){
-      h += itemHtml(it, "d"+di+"-i"+ii);
-    });
-    h += '</div></div></section>';
-    return h;
-  }).join("");
-  scheduleEl.innerHTML = dayHtml;
-
-  // has any day.open by default? if today not in range, open day 0
-  if(!TRIP.some(function(d){return d.date===today;})){
-    var first = scheduleEl.querySelector(".day");
-    if(first) first.classList.add("open");
+  function addItemRowHtml(di){
+    return '<div class="add-item-row">'+
+      '<button type="button" class="add-item-btn" data-add-day="'+di+'">+ 일정 추가</button>'+
+      '<form class="mini-form add-item-form" data-add-form="'+di+'" hidden>'+
+        '<input type="text" class="ai-time" placeholder="시간 (예: 15:00)">'+
+        '<input type="text" class="ai-title" placeholder="제목" required>'+
+        '<input type="text" class="ai-move" placeholder="이동수단 (선택)">'+
+        '<textarea class="ai-desc" placeholder="설명 (선택)" rows="2"></textarea>'+
+        '<button type="submit" class="submit">일정 추가</button>'+
+      '</form>'+
+    '</div>';
   }
 
-  // ---------- toggles: day open/close, tabs, day chips ----------
+  function renderSchedule(){
+    var dayHtml = TRIP.map(function(day, di){
+      var isToday = day.date === today;
+      var h = '<section class="day'+(isToday?' open':'')+'" id="day-'+di+'" data-day="'+di+'">';
+      h += '<button class="day-head" data-toggle="'+di+'"><span class="label"><span class="date">'+shortDate(day.date)+' ('+day.dow+')</span><span class="count">'+dayItemCount(di)+'개 일정</span></span><span class="chev">⌄</span></button>';
+      h += '<div class="day-body"><div class="timeline">';
+      if(day.tip){
+        h += '<div class="tip-card"><div class="tip-title">'+escapeHtml(day.tip.title)+'</div><ul>'+day.tip.items.map(function(x){return '<li>'+escapeHtml(x)+'</li>';}).join("")+'</ul></div>';
+      }
+      day.items.forEach(function(it, ii){
+        var id = "d"+di+"-i"+ii;
+        var eff = state.overrides[id] ? Object.assign({}, it, state.overrides[id]) : it;
+        h += itemHtml(eff, id, false);
+      });
+      (state.customItems[di]||[]).forEach(function(c){
+        h += itemHtml(c, c.id, true);
+      });
+      h += addItemRowHtml(di);
+      h += '</div></div></section>';
+      return h;
+    }).join("");
+    scheduleEl.innerHTML = dayHtml;
+
+    if(!TRIP.some(function(d){return d.date===today;})){
+      var first = scheduleEl.querySelector(".day");
+      if(first) first.classList.add("open");
+    }
+
+    TRIP.forEach(function(day, di){
+      day.items.forEach(function(it, ii){ refreshExtras("d"+di+"-i"+ii); });
+      (state.customItems[di]||[]).forEach(function(c){ refreshExtras(c.id); });
+    });
+  }
+
+  function rerenderItem(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var data = effectiveData(id);
+    if(!data) return;
+    var tmp = document.createElement("div");
+    tmp.innerHTML = itemHtml(data, id, isCustomId(id));
+    var newEl = tmp.firstElementChild;
+    el.parentNode.replaceChild(newEl, el);
+    refreshExtras(id);
+  }
+
+  // ---------- toggles: day open/close, tabs, day chips, add/delete/edit ----------
   document.addEventListener("click", function(e){
     var head = e.target.closest(".day-head");
     if(head){
@@ -521,6 +662,28 @@
       }
       return;
     }
+    var addBtn = e.target.closest(".add-item-btn");
+    if(addBtn){
+      var form = addBtn.parentElement.querySelector(".add-item-form");
+      form.hidden = !form.hidden;
+      if(!form.hidden) form.querySelector(".ai-title").focus();
+      return;
+    }
+    var delItem = e.target.closest(".del-item");
+    if(delItem){
+      var itemId = delItem.getAttribute("data-id");
+      var found = findCustomItem(itemId);
+      if(found){ state.customItems[found.dayIndex].splice(found.idx, 1); }
+      delete state.notes[itemId];
+      delete state.expenses[itemId];
+      saveState();
+      var node = document.getElementById(itemId);
+      if(node) node.remove();
+      if(found) updateDayCount(found.dayIndex);
+      renderSettle();
+      showToast("일정 삭제됨");
+      return;
+    }
     var del = e.target.closest(".del");
     if(del){
       var type = del.getAttribute("data-type");
@@ -543,7 +706,7 @@
     if(view==="settle") renderSettle();
   }
 
-  // ---------- forms: add note / add expense ----------
+  // ---------- forms: add note / add expense / edit item / add item ----------
   document.addEventListener("submit", function(e){
     var noteForm = e.target.closest("[data-note-form]");
     if(noteForm){
@@ -582,6 +745,56 @@
       expForm.querySelector('.seg[data-field="card"]').hidden = true;
       refreshExtras(id2);
       showToast("지출 저장됨");
+      return;
+    }
+    var editForm = e.target.closest("[data-edit-form]");
+    if(editForm){
+      e.preventDefault();
+      var id3 = editForm.getAttribute("data-edit-form");
+      var timeVal3 = editForm.querySelector(".ed-time").value.trim();
+      var titleVal3 = editForm.querySelector(".ed-title").value.trim();
+      var moveVal3 = editForm.querySelector(".ed-move").value.trim();
+      var descVal3 = editForm.querySelector(".ed-desc").value.trim();
+      if(!titleVal3) return;
+      if(isCustomId(id3)){
+        var found3 = findCustomItem(id3);
+        if(found3){
+          found3.item.time = timeVal3; found3.item.title = titleVal3;
+          found3.item.move = moveVal3; found3.item.desc = descVal3;
+        }
+      }else{
+        state.overrides[id3] = { time:timeVal3, title:titleVal3, move:moveVal3, desc:descVal3 };
+      }
+      saveState();
+      rerenderItem(id3);
+      renderSettle();
+      showToast("일정 저장됨");
+      return;
+    }
+    var addForm = e.target.closest("[data-add-form]");
+    if(addForm){
+      e.preventDefault();
+      var di2 = addForm.getAttribute("data-add-form");
+      var aTime = addForm.querySelector(".ai-time").value.trim();
+      var aTitle = addForm.querySelector(".ai-title").value.trim();
+      var aMove = addForm.querySelector(".ai-move").value.trim();
+      var aDesc = addForm.querySelector(".ai-desc").value.trim();
+      if(!aTitle) return;
+      state.customCounter = (state.customCounter||0) + 1;
+      var newId = "d"+di2+"-c"+state.customCounter;
+      var newItem = { id:newId, time:aTime, title:aTitle, move:aMove, desc:aDesc };
+      state.customItems[di2] = state.customItems[di2] || [];
+      state.customItems[di2].push(newItem);
+      saveState();
+      var addRow = addForm.closest(".add-item-row");
+      var tmp = document.createElement("div");
+      tmp.innerHTML = itemHtml(newItem, newId, true);
+      addRow.parentNode.insertBefore(tmp.firstElementChild, addRow);
+      refreshExtras(newId);
+      updateDayCount(di2);
+      addForm.reset();
+      addForm.hidden = true;
+      showToast("일정 추가됨");
       return;
     }
   });
@@ -626,11 +839,6 @@
     }
   }
 
-  // initial paint of all item extras
-  TRIP.forEach(function(day, di){
-    day.items.forEach(function(it, ii){ refreshExtras("d"+di+"-i"+ii); });
-  });
-
   // ---------- settlement view ----------
   function renderSettle(){
     var totalEl = document.getElementById("settleTotal");
@@ -641,13 +849,14 @@
     var flat = [];
 
     TRIP.forEach(function(day, di){
-      day.items.forEach(function(it, ii){
-        var id = "d"+di+"-i"+ii;
-        (state.expenses[id]||[]).forEach(function(x, xi){
+      var ids = day.items.map(function(it, ii){ return { id:"d"+di+"-i"+ii, title: (state.overrides["d"+di+"-i"+ii]||it).title }; });
+      (state.customItems[di]||[]).forEach(function(c){ ids.push({ id:c.id, title:c.title }); });
+      ids.forEach(function(ref){
+        (state.expenses[ref.id]||[]).forEach(function(x, xi){
           var key = x.method === "현금" ? "현금" : x.card;
           groups[key][x.currency] = (groups[key][x.currency]||0) + Number(x.amount);
           grand[x.currency] = (grand[x.currency]||0) + Number(x.amount);
-          flat.push({ day:shortDate(day.date), dow:day.dow, title:it.title, id:id, idx:xi, entry:x });
+          flat.push({ day:shortDate(day.date), dow:day.dow, title:ref.title, id:ref.id, idx:xi, entry:x });
         });
       });
     });
@@ -680,6 +889,39 @@
     }).join("");
   }
 
+  // ---------- backup: export / import JSON ----------
+  document.getElementById("exportBtn").addEventListener("click", function(){
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "bali-trip-data.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast("내보내기 완료");
+  });
+  document.getElementById("importFile").addEventListener("change", function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        var imported = JSON.parse(ev.target.result);
+        state = Object.assign(defaultState(), imported);
+        saveState();
+        renderSchedule();
+        renderSettle();
+        showToast("불러오기 완료");
+      }catch(err){
+        showToast("파일을 읽을 수 없어요");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
   // ---------- toast ----------
   var toastEl = document.getElementById("toast");
   var toastTimer = null;
@@ -690,10 +932,16 @@
     toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 1300);
   }
 
+  renderSchedule();
+
   // scroll today's section into view on first load (if trip is live)
-  var todaySec = TRIP.some(function(d){return d.date===today;}) ? document.getElementById("day-"+TRIP.findIndex(function(d){return d.date===today;})) : null;
-  if(todaySec){
-    setTimeout(function(){ todaySec.scrollIntoView({behavior:"auto", block:"start"}); }, 0);
+  var todayIdx = TRIP.findIndex(function(d){return d.date===today;});
+  if(todayIdx > -1){
+    var todaySec = document.getElementById("day-"+todayIdx);
+    if(todaySec) setTimeout(function(){ todaySec.scrollIntoView({behavior:"auto", block:"start"}); }, 0);
   }
 })();
 </script>
+
+</body>
+</html>
